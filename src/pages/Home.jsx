@@ -2,6 +2,7 @@ import MovieCard from "../Components/MovieCard";
 import "../css/Home.css";
 import { searchMovies, getPopularMovies } from "../services/api";
 import { useState, useEffect } from "react";
+import LoadingSpinner from "../Components/LoadingSpinner";
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -59,7 +60,7 @@ function Home() {
 
       {error && <div className="error-message">{error}</div>}
       {loading ? (
-        <div className="loading ">Loading...</div>
+        <LoadingSpinner />
       ) : (
         <div className="movies-grid">
           {movies.map((movie) => (
