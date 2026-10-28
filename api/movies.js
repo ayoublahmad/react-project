@@ -1,11 +1,18 @@
 export default async function handler(req, res) {
   const { query } = req.query;
+  const apiKey = process.env.MOVIE_API_KEY;
+
+  if (!apiKey) {
+    console.error("MOVIE_API_KEY is not configured");
+    return res.status(500).json({ error: "Movie API is not configured" });
+  }
 
   const endpoint = query
     ? "https://api.themoviedb.org/3/search/movie"
     : "https://api.themoviedb.org/3/movie/popular";
 
   const url = new URL(endpoint);
+  url.searchParams.set("api_key", apiKey);
 
   if (query) {
     url.searchParams.set("query", query);
@@ -14,7 +21,6 @@ export default async function handler(req, res) {
   try {
     const response = await fetch(url, {
       headers: {
-        Authorization: `Bearer ${process.env.MOVIE_API_KEY}`,
         accept: "application/json",
       },
     });
